@@ -6,67 +6,67 @@ translate = boto3.client('translate')
 
 class DocumentAnalyzer():
     def _split_text(texto):
-    # constantes
-    split_char = "\n"
-    qte_chars = 10
+        # constantes
+        split_char = "\n"
+        qte_chars = 10
 
-    splited = texto.split(split_char)
-    final_result = []
-    result = []
-    for linha in splited:
-        print("linha: ", len(linha))
-        current = len(linha)
-        
-        if (len(result) == 0):
-            print("primeira linha")
-            result.append(linha)
-        else:
-            index = len(result) - 1
-            result_current = len(result[index])
-            if result_current + current < qte_chars:
-                print("cabe")
-                result[index] = result[index] + linha
-            else:
-                print("cabe nao")
+        splited = texto.split(split_char)
+        final_result = []
+        result = []
+        for linha in splited:
+            print("linha: ", len(linha))
+            current = len(linha)
+            
+            if (len(result) == 0):
+                print("primeira linha")
                 result.append(linha)
+            else:
+                index = len(result) - 1
+                result_current = len(result[index])
+                if result_current + current < qte_chars:
+                    print("cabe")
+                    result[index] = result[index] + linha
+                else:
+                    print("cabe nao")
+                    result.append(linha)
 
-    print('coube em {} linhas'.format(len(result)))
-    return result
+        print('coube em {} linhas'.format(len(result)))
+        return result
 
-def _call_comprehend(texto):
-    final_doc = self._split_multiple_array_to_comprehend(texto)
-    result = []
+    def _call_comprehend(texto):
+        final_doc = self._split_multiple_array_to_comprehend(texto)
+        result = []
 
-    for item in final_doc:
-        print('CALL COMPREHEND - chamando: ', final_doc)
-        retorno = comprehend.batch_detect_entities(LanguageCode="pt", TextList=item)
-        for item in retorno['ResultList']:
-            if not item['Entities']:
-                print('no entities found for line ', item)
-            for entity in item['Entities']:
-                result.append({
-                    "Score": entity['Score'],
-                    "Type": entity['Type'],
-                    "Text": entity['Text']
-                })
-    return result
+        for item in final_doc:
+            print('CALL COMPREHEND - chamando: ', final_doc)
+            retorno = comprehend.batch_detect_entities(LanguageCode="pt", TextList=item)
+            for item in retorno['ResultList']:
+                if not item['Entities']:
+                    print('no entities found for line ', item)
+                for entity in item['Entities']:
+                    result.append({
+                        "Score": entity['Score'],
+                        "Type": entity['Type'],
+                        "Text": entity['Text']
+                    })
+        return result
 
-def _split_multiple_array_to_comprehend(texto):
-    linhas = self._split_text(texto)
-    final_doc = []
-    line_count = 1
-    part = []
-    for item in linhas:
-        part.append(item)
-        if len(final_doc) == 0:
-            final_doc.append(part)
+    def _split_multiple_array_to_comprehend(texto):
+        linhas = self._split_text(texto)
+        final_doc = []
+        line_count = 1
+        part = []
+        for item in linhas:
+            part.append(item)
+            if len(final_doc) == 0:
+                final_doc.append(part)
 
-        if (line_count > 24):
-            part = []
-            final_doc.append(part)
-            line_count = 0
-        line_count = line_count + 1
-    return final_doc
+            if (line_count > 24):
+                part = []
+                final_doc.append(part)
+                line_count = 0
+            line_count = line_count + 1
+        return final_doc
 
     def extract_entities(self, pages):
         """ extract entities from pages with Comprehend """
