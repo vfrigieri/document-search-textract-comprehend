@@ -5,7 +5,7 @@ translate = boto3.client('translate')
 
 
 class DocumentAnalyzer():
-    def _split_text(texto):
+    def _split_text(self, texto):
         # constantes
         split_char = "\n"
         qte_chars = 10
@@ -33,7 +33,7 @@ class DocumentAnalyzer():
         print('coube em {} linhas'.format(len(result)))
         return result
 
-    def _call_comprehend(texto):
+    def _call_comprehend(self, texto):
         final_doc = self._split_multiple_array_to_comprehend(texto)
         result = []
 
@@ -51,7 +51,7 @@ class DocumentAnalyzer():
                     })
         return result
 
-    def _split_multiple_array_to_comprehend(texto):
+    def _split_multiple_array_to_comprehend(self, texto):
         linhas = self._split_text(texto)
         final_doc = []
         line_count = 1
@@ -77,7 +77,7 @@ class DocumentAnalyzer():
         for page in pages:
             #text = self.__get_clean_text_in_supported_language(page['Content'])
 
-            text = page['Content']
+            text = page.get('Content')
 
             final_entities = self._call_comprehend(text)
             # detected_entities = comprehend.detect_entities(
