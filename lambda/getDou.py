@@ -13,8 +13,8 @@ outputPrefix = "dou/"  # Should end with /
 s3 = boto3.client('s3')
 s3r = boto3.resource('s3')
 
-login = "tassya.ventura@gmail.com"
-senha = "S@lom301"
+login = "xxxx@gmail.com"
+senha = "xxxxx"
 ## Tipos de Diários Oficiais da União permitidos: do1 do2 do3 (Contempla as edições extras) ##
 tipo_dou="do1 do2 do3"
 
